@@ -1,0 +1,97 @@
+﻿<html>
+<body>
+<div>
+<b>A subtle problem of multibyte character string</b><br>
+<br>
+As per N3485:<br>
+<br>
+<b>17.5.2.1.4.1 Byte strings [byte.strings]</b><br>
+1 A <i>null-terminated byte string</i>, or NTBS, is a character sequence whose
+highest-addressed element with defined<br>
+content has the value zero (the <i>terminating null</i> character); no other
+element in the sequence has the value<br>
+zero.168<br>
+2 The <i>length</i> of an NTBS is the number of elements that precede the
+terminating null character. An empty<br>
+NTBS has a length of zero.<br>
+<b>17.5.2.1.4.2 Multibyte strings [multibyte.strings]</b><br>
+1 A <i>null-terminated multibyte string</i>, or
+NTMBS, is an NTBS that constitutes a sequence of valid multibyte<br>
+characters, beginning and ending in the initial shift state.170<br>
+168) Many of the objects manipulated by function signatures declared in &lt;cstring&gt; (21.7) are character sequences or NTBSs.<br>
+The size of some of these character sequences is limited by a length value,
+maintained separately from the character sequence.<br>
+169) A string literal, such as "abc", is a
+static NTBS.<br>
+170) An NTBS that contains characters only from the basic execution character
+set is also an NTMBS. Each multibyte character<br>
+then consists of a single byte.<br>
+<br>
+The meaning of NTBS is quite clear. But I have problem to determine what is the length of an NTMBS.<br>
+An NTMBS is both a sequence of bytes with terminating null character(MTBS)
+and a sequence of valid multibyte characters with
+terminating null character. As an NTBS, its length is the count of non-null
+bytes. As a sequence of valid multibyte characters,
+its length is the count of multibyte characters
+preceding the terminating null character.<br>
+Unfortunately, there is no definition of the length of an NTMBS. So comes the ambiguity.<br>
+<br>
+<br>
+5.2.1.2/1<br>
+...<br>
+— A multibyte character set may have a <i>state-dependent
+encoding</i>, wherein each<br>
+sequence of multibyte characters begins in an <i>initial
+shift state</i> and enters other<br>
+locale-specific <i>shift states</i> when specific multibyte
+characters are encountered in the<br>
+sequence. While in the initial shift state, all single-byte characters retain
+their usual<br>
+interpretation and do not alter the shift state. The interpretation for
+subsequent bytes<br>
+in the sequence is a function of the current shift state.<br>
+<br>
+Obviously, initial shift state is significant for processing of multibyte characters but not bytes. Thus the definition of
+NTMBS suggests it should be treated as sequence of multibyte
+character primarily if this definition is adopted.<br>
+However, there are also some problems of several related terms in this ISO C
+draft:<br>
+<b>7.1.1 Definitions of terms</b><br>
+1 A <i>string</i> is a contiguous sequence of characters terminated by and
+including the first null<br>
+character. The term <i>multibyte</i><i> string</i> is
+sometimes used instead to emphasize special<br>
+processing given to multibyte characters contained in
+the string or to avoid confusion<br>
+with a wide string. A <i>pointer to a string</i> is a pointer to its initial
+(lowest addressed)<br>
+character. The <i>length of a string</i> is the number of bytes preceding the
+null character and<br>
+the <i>value of a string</i> is the sequence of the values of the contained
+characters, in order.<br>
+4 A <i>wide string</i> is a contiguous sequence of wide characters terminated
+by and including<br>
+the first null wide character. A <i>pointer to a wide string</i> is a pointer
+to its initial (lowest<br>
+addressed) wide character. The <i>length of a wide string</i> is the number of
+wide characters<br>
+preceding the null wide character and the <i>value of a wide string</i> is the
+sequence of code<br>
+values of the contained wide characters, in order.<br>
+<br>
+The definition of "length of a string" slightly suggests that byte
+count is fit for even multibyte strings in C.<br>
+I have two questions about it, though probably out scope of ISO C:<br>
+1. Why does the length of wide character string adopt "the number of wide
+characters preceding the null wide character"?<br>
+2. For example, should something "mbcslen"
+just do the same thing as strlen does?<br>
+<br>
+PS2. Is there somewhere I can discuss some questions of ISO/IEC 9899, just as
+talking about ISO/IEC 14882 here? I have found a probable defect in N1570(but no concern with C++).
+<br>
+
+</div>
+</body>
+</html>
+
